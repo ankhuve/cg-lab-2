@@ -83,3 +83,8 @@ void MyMatrix::rotateZ(float rotation)
 	this->myMatrix[4] = -sin(rads);
 	this->myMatrix[5] = cos(rads);
 }
+
+void MyMatrix::setMyMatrix(GLfloat mat[16])
+{
+	memcpy(this->myMatrix, mat, sizeof(mat));
+}

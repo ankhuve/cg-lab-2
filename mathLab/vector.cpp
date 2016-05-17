@@ -1,6 +1,6 @@
 #include "vector.h"
 
-using namespace MyOGLProg;
+using namespace MyMathLab;
 
 Vector::Vector(void)
 {
@@ -86,7 +86,7 @@ Vector Vector::getCrossProduct(const Vector &other) const
 
 void Vector::normalise(void)
 {
-	float m = getMagnitude();
+	float m = this->getMagnitude();
 	this->x = this->x / m;
 	this->y = this->y / m;
 	this->z = this->z / m;

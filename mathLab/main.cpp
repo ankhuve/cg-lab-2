@@ -12,8 +12,10 @@
 #include <gl/glu.h>           // OpenGL utilties
 #include <glut.h>             // OpenGL utilties
 
-#include "vector.h"
-#include "mymatrix.h"
+//#include "vector.h"
+//#include "mymatrix.h"
+#include "myQuat.h"
+
 using namespace MyMathLab;
 
 
@@ -31,6 +33,10 @@ void translateTest(void);
 void draw_square(void);
 void incrementRotation(void);
 void rotateAroundVertex(void);
+void taskTwoStuff(void);
+void taskThreeStuff(void);
+void taskThreeDotTwoDotTwo(void);
+void taskThreeDotTwoDotThree(void);
 
 //our main routine
 int main(int argc, char *argv[])
@@ -79,56 +85,20 @@ void draw(void)
   glLoadIdentity();
   
   //***DO ALL YOUR DRAWING HERE****//
-  //glTranslatef(0.0, 0.0, -10.0);
+  glTranslatef(0.0, 0.0, -10.0);
 
-  MyMatrix myMatrix;
-  myMatrix.getGLModelviewMatrix();
+  //taskTwoStuff();
 
-  myMatrix.printMatrix();
-  
-  myMatrix.translate(0.0, 0.0, -10.0);
-  //myMatrix.rotateZ(rotation);
-  //myMatrix.multiplyGLMatrix();
-  myMatrix.printMatrix();
-  myMatrix.setGLMatrix();
-
-
-
+  // Draw a point to see that things are set up right
+  glColor3f(0.0, 1.0, 0.0);
+  glPointSize(3.0);
   glPushMatrix();
-  glTranslatef(1.0, 1.0, -5.0);
-  if (offsetX == 0.0) {
-	  //glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-	  myMatrix.rotateZ(rotation);
-	  myMatrix.setGLMatrix();
-	  draw_square();
-  }
-  else {
-	  glTranslatef(-offsetX, -offsetY, 0.0);
-	  //glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-	  myMatrix.rotateZ(rotation);
-	  myMatrix.setGLMatrix();
-	  glTranslatef(offsetX, offsetY, 0.0);
-	  draw_square();
-  }
+	  glBegin(GL_POINTS);
+		glVertex3f(0.0, 0.0, 0.0);
+	  glEnd();
   glPopMatrix();
 
-  glPushMatrix();
-  glTranslatef(-1.0, 1.0, -5.0);
-  if (offsetX == 0.0) {
-	  //glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-	  myMatrix.rotateZ(rotation);
-	  draw_square();
-  }
-  else {
-	  glTranslatef(-offsetX, -offsetY, 0.0);
-	  //glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-	  myMatrix.rotateZ(rotation);
-	  glTranslatef(offsetX, offsetY, 0.0);
-	  draw_square();
-  }
-  glPopMatrix();
-
-
+  taskThreeStuff();
   
 
   //flush what we've drawn to the buffer
@@ -243,4 +213,131 @@ void rotateAroundVertex(void)
 {
 	offsetX = 1.0;
 	offsetY = 1.0;
+}
+
+void taskTwoStuff(void)
+{
+	MyMatrix myMatrix;
+	myMatrix.getGLModelviewMatrix();
+
+	myMatrix.printMatrix();
+
+	myMatrix.translate(0.0, 0.0, -10.0);
+	//myMatrix.rotateZ(rotation);
+	//myMatrix.multiplyGLMatrix();
+	myMatrix.printMatrix();
+	myMatrix.setGLMatrix();
+
+
+
+	glPushMatrix();
+	glTranslatef(1.0, 1.0, -5.0);
+	if (offsetX == 0.0) {
+		//glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+		myMatrix.rotateZ(rotation);
+		myMatrix.setGLMatrix();
+		draw_square();
+	}
+	else {
+		glTranslatef(-offsetX, -offsetY, 0.0);
+		//glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+		myMatrix.rotateZ(rotation);
+		myMatrix.setGLMatrix();
+		glTranslatef(offsetX, offsetY, 0.0);
+		draw_square();
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.0, 1.0, -5.0);
+	if (offsetX == 0.0) {
+		//glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+		myMatrix.rotateZ(rotation);
+		draw_square();
+	}
+	else {
+		glTranslatef(-offsetX, -offsetY, 0.0);
+		//glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+		myMatrix.rotateZ(rotation);
+		glTranslatef(offsetX, offsetY, 0.0);
+		draw_square();
+	}
+	glPopMatrix();
+}
+
+void taskThreeStuff(void)
+{
+	// draw basis vector
+	glLineWidth(3.0);
+	glColor3f(1.0, 0.0, 0.0);
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2f(0.0, 0.0);
+	glVertex2f(0.0, 1.0);
+	glColor3f(0.0, 0.0, 1.0);
+	glVertex2f(0.0, 0.0);
+	glVertex2f(1.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
+
+	// 3.2.2
+	taskThreeDotTwoDotTwo();
+
+	// 3.2.3
+	//taskThreeDotTwoDotThree();
+	
+}
+
+void taskThreeDotTwoDotTwo()
+{
+	float rads = DEG2RAD(45);
+	Position p1;
+
+	p1.x = 1.0, p1.y = 1.0, p1.z = 0.0;
+	MyQuat qvec(p1);
+	MyQuat q1(rads, Vector(0.0, 0.0, 1.0));
+
+	MyQuat q1Conj = q1.getConjugate();
+	MyQuat qrA = qvec.multiplyBy(q1Conj);
+	MyQuat qr = q1.multiplyBy(qrA);
+
+
+
+	// TASK 3.2.2 draw initial point and rotated point
+	glColor3f(1.0, 1.0, 0.0);
+	glPointSize(3.0);
+	glPushMatrix();
+	glBegin(GL_POINTS);
+	glVertex3f(p1.x, p1.y, p1.z);
+	glVertex3f(qr.v.x, qr.v.y, qr.v.z);
+	glEnd();
+	glPopMatrix();
+}
+
+void taskThreeDotTwoDotThree()
+{
+	float rads = DEG2RAD(45);
+	Position p2;
+
+	p2.x = 0.0, p2.y = -10.0, p2.z = 0.0;
+	MyQuat qvec2(p2);
+	MyQuat q2(rads, Vector(10.0, 0.0, 0.0));
+
+	MyQuat q2Conj = q2.getConjugate();
+	MyQuat qrB = qvec2.multiplyBy(q2Conj);
+	MyQuat qr2 = q2.multiplyBy(qrB);
+
+	// TASK 3.2.3 draw initial point and rotated point
+	glColor3f(1.0, 1.0, 0.0);
+	glPointSize(3.0);
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, -30.0f);
+	glBegin(GL_POINTS);
+	glVertex3f(p2.x, p2.y, p2.z); // origin
+	glColor3f(1.0, 0.0, 0.0);
+	glVertex3f(qr2.v.x, qr2.v.y, qr2.v.z);
+	glEnd();
+	glPopMatrix();
 }

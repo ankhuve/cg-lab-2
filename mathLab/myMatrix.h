@@ -29,6 +29,8 @@ class MyMatrix
 		void printMatrix(void);
 		void translate(float x, float y, float z);
 		void rotateZ(float rotation);
+
+		void setMyMatrix(GLfloat newMatrix[16]);
 	
 	private:
 

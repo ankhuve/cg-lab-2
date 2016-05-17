@@ -1,6 +1,6 @@
 //Introductory quaternion class
 #include <math.h>
-#include "myvector.h"
+#include "vector.h"
 #include "mymatrix.h"
 
 namespace MyMathLab
@@ -10,8 +10,8 @@ class MyQuat
 {
 	public:
 		MyQuat(void);
-		MyQuat(float angleDeg, MyVector &axis);	//create from axis, angle
-		MyQuat(MyPosition &p);	//create from position
+		MyQuat(float angleDeg, Vector &axis);	//create from axis, angle
+		MyQuat(Position &p);	//create from position
 		
 		~MyQuat(void){;}
 
@@ -26,7 +26,7 @@ class MyQuat
 		MyMatrix convertToRotationMatrix(void) const; 
 
 		float w;
-		MyVector v;
+		Vector v;
 };
 
 
