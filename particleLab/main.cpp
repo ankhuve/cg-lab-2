@@ -23,8 +23,8 @@
 #include "particleSystem.h"
 
 //define the particle systems
-int g_nActiveSystem = 2;
-CParticleSystem *g_pParticleSystems[6];
+int g_nActiveSystem = 6;
+CParticleSystem *g_pParticleSystems[7];
 void initParticles( void );
 float  g_fElpasedTime;
 double g_dCurTime;
@@ -109,7 +109,7 @@ void draw(void)
 	//features and helps verify that the basic system is working
 	//It is possible that Point Sprites may not be supported by your
 	//graphics card, particularly if it is an older type
-	bool doTestRender = true;
+	bool doTestRender = false;
 
 	if (doTestRender)
 	{
@@ -123,6 +123,7 @@ void draw(void)
 		glEnable(GL_BLEND);		
 		
 		//specify blending function here using glBlendFunc
+		glBlendFunc(GL_ONE, GL_ONE);
 		
 		glBindTexture( GL_TEXTURE_2D, g_pParticleSystems[g_nActiveSystem]->GetTextureID() );
 		g_pParticleSystems[g_nActiveSystem]->Render();
@@ -149,7 +150,11 @@ void idle(void)
   //since there are no animations in this test, we can leave 
   //idle() empty
 
+	g_dCurTime = timeGetTime();
+	g_fElpasedTime = (float)((g_dCurTime - g_dLastTime) * 0.001);
+	g_dLastTime = g_dCurTime;
 
+	g_pParticleSystems[g_nActiveSystem]->Update((float)g_fElpasedTime);
 
 	glutPostRedisplay();
 }
@@ -390,4 +395,45 @@ void initParticles( void )
                                           MyVector( 0.0f, 5.0f, 0.0f ) ); // Ceiling
 
     g_pParticleSystems[5]->Init();
+
+
+	//
+	// Custom fountain thingy
+	//
+
+	g_pParticleSystems[6] = new CParticleSystem();
+
+	g_pParticleSystems[6]->SetTexture("particle.bmp");
+	g_pParticleSystems[6]->SetMaxParticles(100);
+	g_pParticleSystems[6]->SetNumToRelease(5);
+	g_pParticleSystems[6]->SetReleaseInterval(1.0f);
+	g_pParticleSystems[6]->SetLifeCycle(20.0f);
+	g_pParticleSystems[6]->SetSize(30.0f);
+	g_pParticleSystems[6]->SetColor(MyVector(1.0f, 0.5f, 0.0f));
+	g_pParticleSystems[6]->SetPosition(MyVector(0.0f, 5.0f, 0.0f));
+	g_pParticleSystems[6]->SetVelocity(MyVector(0.0f, 0.0f, 0.0f));
+	g_pParticleSystems[6]->SetGravity(MyVector(0.0f, -9.8f, 0.0f));
+	g_pParticleSystems[6]->SetWind(MyVector(0.0f, 0.0f, 0.0f));
+	g_pParticleSystems[6]->SetVelocityVar(15.0f);
+
+	// Create a series of planes to collide with
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(0.0f, 1.0f, 0.0f),
+		MyVector(0.0f, -5.0f, 0.0f)); // Floor
+
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(1.0f, 0.0f, 0.0f),
+		MyVector(-5.0f, 0.0f, 0.0f), 1, CR_STICK); // Left Wall
+
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(-1.0f, 0.0f, 0.0f),
+		MyVector(5.0f, 0.0f, 0.0f), 1, CR_STICK); // Right Wall
+
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(0.0f, 0.0f, 1.0f),
+		MyVector(0.0f, 0.0f, -1.0f)); // Front Wall
+
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(0.0f, 0.0f, -1.0f),
+		MyVector(0.0f, 0.0f, 1.0f)); // Back Wall
+
+	g_pParticleSystems[6]->SetCollisionPlane(MyVector(0.0f, -1.0f, 0.0f),
+		MyVector(0.0f, 5.0f, 0.0f)); // Ceiling
+
+	g_pParticleSystems[6]->Init();
 }

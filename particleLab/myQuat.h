@@ -1,15 +1,17 @@
 //Introductory quaternion class
-
 #include <math.h>
-#include "myvector.h"
+#include "myVector.h"
 #include "mymatrix.h"
+
+namespace MyMathLab
+{
 
 class MyQuat
 {
 	public:
 		MyQuat(void);
 		MyQuat(float angleDeg, MyVector &axis);	//create from axis, angle
-		MyQuat(MyPosition &p);	//create from position
+		MyQuat(Position &p);	//create from position
 		
 		~MyQuat(void){;}
 
@@ -26,3 +28,6 @@ class MyQuat
 		float w;
 		MyVector v;
 };
+
+
+}

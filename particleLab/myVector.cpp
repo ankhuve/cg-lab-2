@@ -1,4 +1,4 @@
-#include "MyVector.h"
+#include "myVector.h"
 
 MyVector::MyVector(void)
 {
@@ -10,8 +10,9 @@ MyVector::MyVector(float x, float y, float z)
 	this->x = x; this->y = y; this->z = z;
 }
 
-MyVector::MyVector(MyPosition& start, MyPosition& end)
+MyVector::MyVector(Position& start, Position& end)
 {
+	//initialise this MyVector from two positions
 	this->x = end.x - start.x;
 	this->y = end.y - start.y;
 	this->z = end.z - start.z;
@@ -19,159 +20,177 @@ MyVector::MyVector(MyPosition& start, MyPosition& end)
 
 MyVector MyVector::addTo(const MyVector &other) const
 {
+	//add this MyVector to other and return the result
 	MyVector result;
-	//your code here
+
+	result.x = other.x + this->x;
+	result.y = other.y + this->y;
+	result.z = other.z + this->z;
+
 	return result;
 }
 
 MyVector MyVector::subtractFrom(const MyVector &other) const
 {
+	//subtract this MyVector from other and return the result
 	MyVector result;
-	//your code here
+
+	result.x = other.x - this->x;
+	result.y = other.y - this->y;
+	result.z = other.z - this->z;
+
 	return result;
 }
-		
+
 float MyVector::getMagnitude(void) const
 {
+	//get the length of the MyVector
 	float result;
-	//your code here
+
+	result = sqrt((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+
 	return result;
-}
-
-void MyVector::uniformScale(const float m)
-{
-	//your code here
-}
-
-void MyVector::normalise(void)
-{
-	//your code here
 }
 
 void MyVector::setMagnitude(const float m)
 {
-	if (this->getMagnitude() > 0.0)
-	{
-		this->normalise();
-		this->uniformScale(m);
-	}
+	//set the length of the MyVector
+	this->x = this->x * m;
+	this->y = this->y * m;
+	this->z = this->z * m;
 }
-	
+
 float MyVector::getDotProduct(const MyVector &other) const
 {
+	//return the dot product between this MyVector and other
 	float result;
-	//your code here
+
+	result = this->x * other.x + this->y * other.y + this->z * other.z;
+
 	return result;
 }
 
 MyVector MyVector::getCrossProduct(const MyVector &other) const
 {
+	//return the cross product between this MyVector and other
 	MyVector result;
-	//your code here
+
+	result.x = (this->y * other.z) - (this->z * other.y);
+	result.y = (this->z * other.x) - (this->x * other.z);
+	result.z = (this->x * other.y) - (this->y * other.x);
+
 	return result;
 }
 
-MyVector MyVector::operator + ( const MyVector &other )
+void MyVector::normalise(void)
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
-
-    vResult.x = x + other.x;
-    vResult.y = y + other.y;
-    vResult.z = z + other.z;
-
-    return vResult;
+	float m = getMagnitude();
+	this->x = this->x / m;
+	this->y = this->y / m;
+	this->z = this->z / m;
 }
 
-MyVector MyVector::operator + ( void ) const
+MyVector MyVector::operator + (const MyVector &other)
 {
-    return *this;
+	MyVector vResult(0.0f, 0.0f, 0.0f);
+
+	vResult.x = x + other.x;
+	vResult.y = y + other.y;
+	vResult.z = z + other.z;
+
+	return vResult;
 }
 
-MyVector MyVector::operator - ( const MyVector &other )
+MyVector MyVector::operator + (void) const
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
-
-    vResult.x = x - other.x;
-    vResult.y = y - other.y;
-    vResult.z = z - other.z;
-
-    return vResult;
+	return *this;
 }
 
-MyVector MyVector::operator - ( void ) const
+MyVector MyVector::operator - (const MyVector &other)
 {
-    MyVector vResult(-x, -y, -z);
+	MyVector vResult(0.0f, 0.0f, 0.0f);
 
-    return vResult;
+	vResult.x = x - other.x;
+	vResult.y = y - other.y;
+	vResult.z = z - other.z;
+
+	return vResult;
 }
 
-MyVector MyVector::operator * ( const MyVector &other )
+MyVector MyVector::operator - (void) const
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
+	MyVector vResult(-x, -y, -z);
 
-    vResult.x = x * other.x;
-    vResult.y = y * other.y;
-    vResult.z = z * other.z;
-
-    return vResult;
+	return vResult;
 }
 
-MyVector MyVector::operator * ( const float scalar )
+MyVector MyVector::operator * (const MyVector &other)
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
+	MyVector vResult(0.0f, 0.0f, 0.0f);
 
-    vResult.x = x * scalar;
-    vResult.y = y * scalar;
-    vResult.z = z * scalar;
+	vResult.x = x * other.x;
+	vResult.y = y * other.y;
+	vResult.z = z * other.z;
 
-    return vResult;
+	return vResult;
 }
 
-MyVector operator * ( const float scalar, const MyVector &other )
+MyVector MyVector::operator * (const float scalar)
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
+	MyVector vResult(0.0f, 0.0f, 0.0f);
 
-    vResult.x = other.x * scalar;
-    vResult.y = other.y * scalar;
-    vResult.z = other.z * scalar;
+	vResult.x = x * scalar;
+	vResult.y = y * scalar;
+	vResult.z = z * scalar;
 
-    return vResult;
+	return vResult;
 }
 
-MyVector MyVector::operator / ( const MyVector &other )
+MyVector operator * (const float scalar, const MyVector &other)
 {
-    MyVector vResult(0.0f, 0.0f, 0.0f);
+	MyVector vResult(0.0f, 0.0f, 0.0f);
 
-    vResult.x = x / other.x;
-    vResult.y = y / other.y;
-    vResult.z = z / other.z;
+	vResult.x = other.x * scalar;
+	vResult.y = other.y * scalar;
+	vResult.z = other.z * scalar;
 
-    return vResult;
+	return vResult;
 }
 
-MyVector& MyVector::operator = ( const MyVector &other )
+MyVector MyVector::operator / (const MyVector &other)
+{
+	MyVector vResult(0.0f, 0.0f, 0.0f);
+
+	vResult.x = x / other.x;
+	vResult.y = y / other.y;
+	vResult.z = z / other.z;
+
+	return vResult;
+}
+
+MyVector& MyVector::operator = (const MyVector &other)
 {
 	x = other.x;
 	y = other.y;
 	z = other.z;
 
-    return *this;
+	return *this;
 }
 
-MyVector& MyVector::operator += ( const MyVector &other )
+MyVector& MyVector::operator += (const MyVector &other)
 {
-    x += other.x;
-    y += other.y;
-    z += other.z;
+	x += other.x;
+	y += other.y;
+	z += other.z;
 
-    return *this;
+	return *this;
 }
 
-MyVector& MyVector::operator -= ( const MyVector &other )
+MyVector& MyVector::operator -= (const MyVector &other)
 {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
+	x -= other.x;
+	y -= other.y;
+	z -= other.z;
 
-    return *this;
+	return *this;
 }

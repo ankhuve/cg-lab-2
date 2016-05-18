@@ -1,7 +1,7 @@
 //Introductory matrix class
 
- #ifndef MYMATRIX__H 
- #define MYMATRIX__H 
+#ifndef MYMATRIX__H 
+#define MYMATRIX__H 
 
 #include <math.h>
 
@@ -25,6 +25,12 @@ class MyMatrix
 
 		void multiplyGLMatrix(void);
 		void setGLMatrix(void);
+
+		void printMatrix(void);
+		void translate(float x, float y, float z);
+		void rotateZ(float rotation);
+
+		void setMyMatrix(GLfloat newMatrix[16]);
 	
 	private:
 
@@ -32,5 +38,4 @@ class MyMatrix
 
 		GLfloat myMatrix[16];
 };
-
 #endif

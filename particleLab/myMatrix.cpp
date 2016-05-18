@@ -1,5 +1,5 @@
 #include "myMatrix.h"
-
+#include <iostream>
 
 MyMatrix::MyMatrix(void)
 {
@@ -52,4 +52,37 @@ void MyMatrix::setGLMatrix(void)
 // glMatrixMode()!!!
 {
 	glLoadMatrixf(this->myMatrix);
+}
+
+void MyMatrix::printMatrix(void)
+{
+	int numberOfValues = sizeof(this->myMatrix) / sizeof(this->myMatrix[0]);
+	for (int i = 0; i < numberOfValues; i++) {
+		std::cout << this->myMatrix[i] << "  ";
+		if ((i + 1) % 4 == 0) {
+			std::cout << "\n";
+		}
+	}
+	std::cout << "\n";
+}
+
+void MyMatrix::translate(float x, float y, float z)
+{
+	this->myMatrix[12] = x;
+	this->myMatrix[13] = y;
+	this->myMatrix[14] = z;
+}
+
+void MyMatrix::rotateZ(float rotation)
+{
+	float rads = (rotation * 3.141592653589793 / 180.0); // convert degrees to radians
+	this->myMatrix[0] = cos(rads);
+	this->myMatrix[1] = sin(rads);
+	this->myMatrix[4] = -sin(rads);
+	this->myMatrix[5] = cos(rads);
+}
+
+void MyMatrix::setMyMatrix(GLfloat mat[16])
+{
+	memcpy(this->myMatrix, mat, sizeof(mat));
 }
